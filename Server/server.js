@@ -3,6 +3,13 @@ const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const contactRoute = require('./routes/contact');
+const cors = require('cors');
+
+// Allow frontend hosted on Vercel
+app.use(cors({
+  origin: 'https://quill-go20diqzl-harshxryugas-projects.vercel.app/',
+  methods: ['POST', 'GET'],
+}));
 
 dotenv.config();
 const app = express();
@@ -22,6 +29,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error(err));
 
-app.listen(3000, () => {
+const Port = 3000;
+app.listen(Port, () => {
   console.log('Server running on http://localhost:3000');
 });

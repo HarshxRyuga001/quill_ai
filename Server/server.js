@@ -5,6 +5,9 @@ const dotenv = require('dotenv');
 const contactRoute = require('./routes/contact');
 const cors = require('cors');
 
+dotenv.config();
+const app = express();
+
 app.use(cors({
   origin: 'https://quill-go20diqzl-harshxryugas-projects.vercel.app',
   methods: ['GET', 'POST'],
@@ -12,9 +15,6 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-dotenv.config();
-const app = express();
 
 // Middleware
 app.use(express.json());

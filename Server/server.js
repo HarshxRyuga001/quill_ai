@@ -5,11 +5,13 @@ const dotenv = require('dotenv');
 const contactRoute = require('./routes/contact');
 const cors = require('cors');
 
-// Allow frontend hosted on Vercel
 app.use(cors({
-  origin: 'https://quill-go20diqzl-harshxryugas-projects.vercel.app/',
-  methods: ['POST', 'GET'],
+  origin: 'https://quill-go20diqzl-harshxryugas-projects.vercel.app',
+  methods: ['GET', 'POST'],
 }));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 dotenv.config();
 const app = express();

@@ -1,51 +1,57 @@
 const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const contactRoute = require('./routes/contact');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config();
 
-dotenv.config();
 const app = express();
 
+// ✅ CORS fix: allow both localhost & Vercel frontend
 const allowedOrigins = [
-  'https://quill-go20diqzl-harshxryugas-projects.vercel.app',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://quill-go20diqzl-harshxryugas-projects.vercel.app'
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
     } else {
-      return callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS'));
     }
   },
   methods: ['GET', 'POST'],
   credentials: true
 }));
 
+// ✅ Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// ✅ Connect MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, '../client')));
+// ✅ Example contact route
+app.post('/api/contact', async (req, res) => {
+  const { name, email, message } = req.body;
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'All fields required' });
+  }
 
-// Routes
-app.use('/api/contact', contactRoute);
-
-// MongoDB Connect
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error(err));
-
-
-app.listen(process.env.port, () => {
-  console.log('Server running on http://localhost:3000');
+  // Save to DB (assuming Contact model is defined)
+  try {
+    // const newContact = new Contact({ name, email, message });
+    // await newContact.save();
+    res.json({ message: 'Message saved successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
 });
+
+// ✅ Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,3 +1,5 @@
+const BACKEND_URL = "https://quill-ai.onrender.com";
+
 document.getElementById('contactForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
@@ -9,19 +11,14 @@ document.getElementById('contactForm').addEventListener('submit', async function
   };
 
   try {
-    const res = await fetch('/api/contact', {
+    const res = await fetch(`${BACKEND_URL}/api/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
     });
 
     const data = await res.json();
-    if (res.ok) {
-      formStatus.textContent = 'Message sent successfully!';
-      this.reset();
-    } else {
-      formStatus.textContent = 'Failed to send message.';
-    }
+    formStatus.textContent = res.ok ? 'Message sent successfully!' : 'Failed to send message.';
   } catch (err) {
     formStatus.textContent = 'Error connecting to server.';
   }

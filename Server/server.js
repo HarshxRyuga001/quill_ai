@@ -9,7 +9,7 @@ const app = express();
 // ✅ CORS fix: allow both localhost & Vercel frontend
 const allowedOrigins = [
   'http://localhost:3000',
-  /\.vercel\.app$/  // RegExp to allow all Vercel previews
+  'http://quill-3kbstd6d5-harshxryugas-projects.vercel.app' // RegExp to allow all Vercel previews
 ];
 
 app.use(cors({

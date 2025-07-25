@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us | Quiell AI</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav">
+            <img src="assets/images/logo.png" alt="Quiell AI Logo" class="logo" />
+            <div class="hamburger" id="hamburger">☰</div>
+            <nav id="navbar">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="business.html">Business Division</a></li>
+                    <li><a href="contact.html" class="active">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contact Form -->
+    <section class="contact-section">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <p>Have a question or want to work with us? We'd love to hear from you!</p>
+
+            <form id="contactForm" data-aos="fade-up" data-aos-delay="200">
+                <input type="text" name="name" placeholder="Your Name" required data-aos="fade-right"
+                    data-aos-delay="300" />
+                <input type="email" name="email" placeholder="Your Email" required data-aos="fade-right"
+                    data-aos-delay="400" />
+                <textarea name="message" placeholder="Your Message" required data-aos="fade-right"
+                    data-aos-delay="500"></textarea>
+                <button type="submit" data-aos="zoom-in" data-aos-delay="600">Send Message</button>
+                <p id="formStatus" data-aos="fade-in" data-aos-delay="200"></p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Quiell AI Technologies Pvt. Ltd. | All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/contact.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>AOS.init();</script>
+
+</body>
+
+</html>

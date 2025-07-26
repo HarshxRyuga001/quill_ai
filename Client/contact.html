@@ -35,7 +35,7 @@
             <h1>Contact Us</h1>
             <p>Have a question or want to work with us? We'd love to hear from you!</p>
 
-            <form id="contactForm" data-aos="fade-up" data-aos-delay="200">
+            <form  id="contactForm" data-aos="fade-up" data-aos-delay="200">
                 <input type="text" name="name" placeholder="Your Name" required data-aos="fade-right"
                     data-aos-delay="300" />
                 <input type="email" name="email" placeholder="Your Email" required data-aos="fade-right"
@@ -43,9 +43,31 @@
                 <textarea name="message" placeholder="Your Message" required data-aos="fade-right"
                     data-aos-delay="500"></textarea>
                 <button type="submit" data-aos="zoom-in" data-aos-delay="600">Send Message</button>
-                <p id="formStatus" data-aos="fade-in" data-aos-delay="200"></p>
+                <p id="responseMsg" data-aos="fade-in" data-aos-delay="200"></p>
             </form>
         </div>
+        <script>
+            const form = document.getElementById('contactForm');
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const formData = {
+                    name: form.name.value,
+                    email: form.email.value,
+                    message: form.message.value
+                };
+
+                const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await res.json();
+                document.getElementById('responseMsg').textContent =
+                    data.message || data.error || 'Something went wrong.';
+            });
+        </script>
     </section>
 
     <!-- Footer -->
@@ -55,16 +77,16 @@
         </div>
     </footer>
 
-<!-- AOS LIBRARY -->
-<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-<script>
-  AOS.init();
-</script>
+    <!-- AOS LIBRARY -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 
-<!-- Your Scripts -->
-<script src="assets/js/main.js"></script>
-<script src="assets/js/contact.js"></script>
+    <!-- Your Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/contact.js"></script>
 
 </body>
 

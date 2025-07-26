@@ -1,56 +1,45 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const path = require('path');
-require('dotenv').config();
+import express from 'express';
+import { Contacts } from './models/Contact.js';
+import mongoose from 'mongoose';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const app = express();
 
-// ✅ CORS fix: allow both localhost & Vercel frontend
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://quill-3kbstd6d5-harshxryugas-projects.vercel.app' // RegExp to allow all Vercel previews
-];
+// Handle __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.some(o => typeof o === 'string' ? o === origin : o.test(origin))) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST'],
-}));
-
-// ✅ Middlewares
+// Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../Client')));
 
-// ✅ Connect MongoDB
-mongoose.connect(process.env.MONGO_URI, {
+// MongoDB connection
+mongoose.connect('mongodb+srv://yourtypenot17:XXZgZOkVH3jdkXMH@cluster0.f7lp2.mongodb.net/', {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+})
+.then(() => console.log('✅ MongoDB connected'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
-// ✅ Example contact route
+// API to handle form submission
 app.post('/api/contact', async (req, res) => {
-  const { name, email, message } = req.body;
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: 'All fields required' });
-  }
-
-  // Save to DB (assuming Contact model is defined)
   try {
-    // const newContact = new Contact({ name, email, message });
-    // await newContact.save();
-    res.json({ message: 'Message saved successfully' });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+    const { name, email, message } = req.body;
+    const newContact = new Contacts({ name, email, message });
+    await newContact.save();
+    res.status(201).json({ message: 'Message sent successfully!' });
+  } catch (error) {
+    console.error('Error saving contact:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-// ✅ Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Serve contact.html on root or custom route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Client', 'index.html'));
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
